@@ -80,7 +80,7 @@ datanode:
         - ReadWriteOnce
       resources:
         requests:
-          storage: 500Gi
+          storage: 220Gi
   extraEnvVars: {}
   # Example usage:
   # HADOOP_HEAPSIZE_MIN: 128m

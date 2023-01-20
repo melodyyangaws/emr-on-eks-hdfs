@@ -38,11 +38,13 @@ managedNodeGroups:
   - name: hdfs-mn
     availabilityZones: ["us-west-2b"] 
     # mount fsx for lustre
+    # if the s3 data repo is configured before the mount, subpath will be created under the ec2-user
+    # if it is created after the mount, the subpath will be created under the root user.
     preBootstrapCommands:
       - "sudo amazon-linux-extras install -y lustre; sudo mkdir -p /data0;"
       - "sudo echo fs-0082b23e03351fa9b.fsx.us-west-2.amazonaws.com@tcp:/o3iclbev /data0 lustre defaults,noatime,flock,_netdev,x-systemd.automount,x-systemd.requires=network.service 0 0 >> /etc/fstab;"
       - "sudo mount -a;"
-      - "sudo chown -R 1000:1000 /data0"
+      - "sudo chown -R ec2-user:ec2-user /data0"
     instanceType: c5.9xlarge
     volumeSize: 50
     volumeType: gp3
@@ -75,41 +77,7 @@ managedNodeGroups:
     tags:
       # required for cluster-autoscaler auto-discovery
       k8s.io/cluster-autoscaler/enabled: "true"
-      k8s.io/cluster-autoscaler/eks-rss: "owned"
-  - name: c59a
-    availabilityZones: ["us-west-2a"] 
-    instanceType: c5.9xlarge
-    preBootstrapCommands:
-      - "sudo systemctl restart docker --no-block"
-    volumeSize: 50
-    volumeType: gp3
-    minSize: 1
-    desiredCapacity: 1
-    maxSize: 50
-    placement:
-      groupName: eks-rss-agroup
-    labels:
-      app: sparktest
-    tags:
-      k8s.io/cluster-autoscaler/enabled: "true"
-      k8s.io/cluster-autoscaler/eks-rss: "owned" 
-  - name: c59b
-    availabilityZones: ["us-west-2b"] 
-    instanceType: c5.9xlarge
-    preBootstrapCommands:
-      - "sudo systemctl restart docker --no-block"
-    volumeSize: 50
-    volumeType: gp3
-    minSize: 1
-    desiredCapacity: 1
-    maxSize: 50
-    placement:
-      groupName: eks-rss-bgroup
-    labels:
-      app: sparktest
-    tags:
-      k8s.io/cluster-autoscaler/enabled: "true"
-      k8s.io/cluster-autoscaler/eks-rss: "owned"     
+      k8s.io/cluster-autoscaler/eks-rss: "owned"   
 # enable all of the control plane logs
 cloudWatch:
  clusterLogging:

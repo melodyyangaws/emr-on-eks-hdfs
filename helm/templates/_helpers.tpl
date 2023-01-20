@@ -57,16 +57,20 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- define "hdfs.namenode.volumes" -}}
 {{- $count := int . -}}
 {{- range $k, $v := until $count -}}
-{{- if gt $v 0 -}},{{- end -}}
-/data0/nn{{- $v -}}/dfs/name
+{{- range $i := until $count -}}
+{{- if or (gt $v 0) (gt $i 0) -}},{{- end -}}
+/data0/nn{{- $v -}}/dfs/name{{- $i -}}
+{{- end -}}
 {{- end -}}
 {{- end -}}
 
 {{- define "hdfs.datanode.volumes" -}}
 {{- $count := int . -}}
 {{- range $k, $v := until $count -}}
-{{- if gt $v 0 -}},{{- end -}}
-/data0/dn{{- $v -}}/dfs/data
+	{{- range $i := until $count -}}
+{{- if or (gt $v 0) (gt $i 0) -}},{{- end -}}
+/data0/dn{{- $v -}}/dfs/data{{- $i -}}
+{{- end -}}
 {{- end -}}
 {{- end -}}
 

@@ -2,17 +2,16 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: hdfs-datanode-0
-  labels:
-    type: localFsx
+  name: data0-hdfs-datanode-0
 spec:
   storageClassName: fsx
   capacity:
-    storage: 500Gi
+    storage: 220Gi
   volumeMode: Filesystem
   persistentVolumeReclaimPolicy: Recycle
   accessModes:
     - ReadWriteOnce
+  # To get the subpath created under 1000 userid, it must be configured by the s3 data repo before hand
   hostPath:
     path: "/data0/dn0"
 
@@ -20,11 +19,63 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: hdfs-datanode-1
+  name: data1-hdfs-datanode-0
 spec:
   storageClassName: fsx
   capacity:
-    storage: 500Gi
+    storage: 220Gi
+  volumeMode: Filesystem
+  persistentVolumeReclaimPolicy: Recycle
+  accessModes:
+    - ReadWriteOnce
+  # To get the subpath created under 1000 userid, it must be configured by the s3 data repo before hand
+  hostPath:
+    path: "/data0/dn1"
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: data2-hdfs-datanode-0
+spec:
+  storageClassName: fsx
+  capacity:
+    storage: 220Gi
+  volumeMode: Filesystem
+  persistentVolumeReclaimPolicy: Recycle
+  accessModes:
+    - ReadWriteOnce
+  # To get the subpath created under 1000 userid, it must be configured by the s3 data repo before hand
+  hostPath:
+    path: "/data0/dn2"
+
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: data0-hdfs-datanode-1
+spec:
+  storageClassName: fsx
+  capacity:
+    storage: 220Gi
+  volumeMode: Filesystem
+  persistentVolumeReclaimPolicy: Recycle
+  accessModes:
+    - ReadWriteOnce
+  # To get the subpath created under 1000 userid, it must be configured by the s3 data repo before hand
+  hostPath:
+    path: "/data0/dn0"
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: data1-hdfs-datanode-1
+spec:
+  storageClassName: fsx
+  capacity:
+    storage: 220Gi
   volumeMode: Filesystem
   persistentVolumeReclaimPolicy: Recycle
   accessModes:
@@ -36,11 +87,62 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: hdfs-datanode-2
+  name: data2-hdfs-datanode-1
 spec:
   storageClassName: fsx
   capacity:
-    storage: 500Gi
+    storage: 220Gi
+  volumeMode: Filesystem
+  persistentVolumeReclaimPolicy: Recycle
+  accessModes:
+    - ReadWriteOnce
+  # To get the subpath created under 1000 userid, it must be configured by the s3 data repo before hand
+  hostPath:
+    path: "/data0/dn2"
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: data0-hdfs-datanode-2
+spec:
+  storageClassName: fsx
+  capacity:
+    storage: 220Gi
+  volumeMode: Filesystem
+  persistentVolumeReclaimPolicy: Recycle
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/data0/dn0"
+
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: data1-hdfs-datanode-2
+spec:
+  storageClassName: fsx
+  capacity:
+    storage: 220Gi
+  volumeMode: Filesystem
+  persistentVolumeReclaimPolicy: Recycle
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/data0/dn1"
+
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: data2-hdfs-datanode-2
+spec:
+  storageClassName: fsx
+  capacity:
+    storage: 220Gi
   volumeMode: Filesystem
   persistentVolumeReclaimPolicy: Recycle
   accessModes:
@@ -52,7 +154,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: hdfs-namenode-0
+  name: data0-hdfs-namenode-0
 spec:
   storageClassName: fsx
   capacity:

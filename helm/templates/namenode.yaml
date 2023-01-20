@@ -48,17 +48,15 @@ spec:
       {{- if and .Values.config.rackAwareness .Values.config.rackAwareness.nodeTopologyLabel }}
       serviceAccountName: {{ template "hdfs.namenodeServiceAccountName" . }}
       {{- end }}
-      initContainers:
-      - name: volume-permission
-        image: public.ecr.aws/y4g4v0z7/busybox
-        securityContext:
-          runAsUser: 0
-        command: ["sh", "-c", "chown -R {{ .Values.datanode.securityContext.runAsUser }}:{{ .Values.datanode.securityContext.runAsGroup }} /data0/nn*"] 
-        {{- range $k, $v := until (int .Values.namenode.dataVolumes.count) }}
-        volumeMounts:
-          - name: data{{$v}}
-            mountPath: /data0/nn{{$v}}
-        {{- end }}
+      # initContainers:
+      # - name: volume-permission
+      #   image: public.ecr.aws/y4g4v0z7/busybox
+      #   command: ["sh", "-c", "chmod -R 750 /data0; chown -hR +{{ .Values.datanode.securityContext.runAsUser }}:+{{ .Values.datanode.securityContext.runAsGroup }} /data0/nn*"] 
+      #   {{- range $k, $v := until (int .Values.namenode.dataVolumes.count) }}
+      #   volumeMounts:
+      #     - name: data{{$v}}
+      #       mountPath: /data0/nn{{$v}}
+      #   {{- end }}
       containers:
       - name: namenode
         image: {{ .Values.namenode.repository }}:{{ .Values.namenode.tag }}
