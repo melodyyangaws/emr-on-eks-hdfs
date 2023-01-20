@@ -1,0 +1,116 @@
+---
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+  name: eks-rss
+  region: us-west-2
+  version: "1.22"
+vpc:
+  clusterEndpoints:
+      publicAccess: true
+      privateAccess: true  
+availabilityZones: ["us-west-2a","us-west-2b"]   
+iam:
+  withOIDC: true
+  serviceAccounts:
+  - metadata:
+      name: cluster-autoscaler
+      namespace: kube-system
+      labels: {aws-usage: "cluster-ops"}
+    wellKnownPolicies:
+      autoScaler: true
+    roleName: eksctl-cluster-autoscaler-role
+  - metadata:
+      name: oss
+      namespace: oss
+      labels: {aws-usage: "application"}
+    attachPolicyARNs:
+    - arn:aws:iam::021732063925:policy/emr-on-eks-rss-execution-role-policy
+  - metadata:
+      name: amp-iamproxy-ingest-service-account
+      namespace: prometheus
+      labels: {aws-usage: "monitoring"}
+    attachPolicyARNs: 
+    - "arn:aws:iam::aws:policy/AmazonPrometheusRemoteWriteAccess"
+    roleName: eks-rss-prometheus-ingest 
+    roleOnly: true    
+managedNodeGroups: 
+  - name: hdfs-mn
+    availabilityZones: ["us-west-2b"] 
+    # mount fsx for lustre
+    preBootstrapCommands:
+      - "sudo amazon-linux-extras install -y lustre; sudo mkdir -p /data0;"
+      - "sudo echo fs-0082b23e03351fa9b.fsx.us-west-2.amazonaws.com@tcp:/o3iclbev /data0 lustre defaults,noatime,flock,_netdev,x-systemd.automount,x-systemd.requires=network.service 0 0 >> /etc/fstab;"
+      - "sudo mount -a;"
+      - "sudo chown -R 1000:1000 /data0"
+    instanceType: c5.9xlarge
+    volumeSize: 50
+    volumeType: gp3
+    minSize: 1
+    desiredCapacity: 1
+    maxSize: 50
+    labels:
+      app: hdfs
+    tags:
+      # required for cluster-autoscaler auto-discovery
+      k8s.io/cluster-autoscaler/enabled: "true"
+      k8s.io/cluster-autoscaler/eks-rss: "owned"  
+  - name: css-i3en
+    availabilityZones: ["us-west-2b"] 
+    # mount local SSD instance store
+    preBootstrapCommands:
+      - "IDX=1;for DEV in /dev/nvme[1-9]n1;do sudo mkfs.xfs ${DEV}; sudo mkdir -p /local${IDX}; sudo echo ${DEV} /local${IDX} xfs defaults,noatime 1 2 >> /etc/fstab; IDX=$((${IDX} + 1)); done"
+      - "sudo mount -a"
+      - "sudo chown ec2-user:ec2-user /local*"
+    instanceType: i3en.6xlarge
+    volumeSize: 20
+    volumeType: gp3
+    minSize: 1
+    desiredCapacity: 1
+    maxSize: 20
+    placement:
+      groupName: eks-rss-bgroup
+    labels:
+      app: css
+    tags:
+      # required for cluster-autoscaler auto-discovery
+      k8s.io/cluster-autoscaler/enabled: "true"
+      k8s.io/cluster-autoscaler/eks-rss: "owned"
+  - name: c59a
+    availabilityZones: ["us-west-2a"] 
+    instanceType: c5.9xlarge
+    preBootstrapCommands:
+      - "sudo systemctl restart docker --no-block"
+    volumeSize: 50
+    volumeType: gp3
+    minSize: 1
+    desiredCapacity: 1
+    maxSize: 50
+    placement:
+      groupName: eks-rss-agroup
+    labels:
+      app: sparktest
+    tags:
+      k8s.io/cluster-autoscaler/enabled: "true"
+      k8s.io/cluster-autoscaler/eks-rss: "owned" 
+  - name: c59b
+    availabilityZones: ["us-west-2b"] 
+    instanceType: c5.9xlarge
+    preBootstrapCommands:
+      - "sudo systemctl restart docker --no-block"
+    volumeSize: 50
+    volumeType: gp3
+    minSize: 1
+    desiredCapacity: 1
+    maxSize: 50
+    placement:
+      groupName: eks-rss-bgroup
+    labels:
+      app: sparktest
+    tags:
+      k8s.io/cluster-autoscaler/enabled: "true"
+      k8s.io/cluster-autoscaler/eks-rss: "owned"     
+# enable all of the control plane logs
+cloudWatch:
+ clusterLogging:
+   enableTypes: ["*"]
