@@ -28,14 +28,15 @@ spec:
       {{- include "hdfs.selectorLabels" . | nindent 6 }}
       app.kubernetes.io/component: datanode
   volumeClaimTemplates:
-{{- range $k, $v := until (int .Values.datanode.dataVolumes.count) }}
+  # {{- range $vol := until (int .Values.datanode.dataVolumes.count) }}
   - metadata:
-      name: data{{$v}}
+      # name: data{{$vol}}
+      name: datavol
       labels:
         {{- include "hdfs.labels" $ | nindent 8 }}
     spec:
       {{- toYaml $.Values.datanode.dataVolumes.pvcTemplateSpec | nindent 6 }}
-{{- end }}
+  # {{- end }}  
   template:
     metadata:
       annotations:
@@ -54,6 +55,19 @@ spec:
           "-c",
           'for i in $(seq 1 300); do nc -z -w3 {{ template "hdfs.fullname" . }}-namenode-0.{{ template "hdfs.fullname" . }}-namenodes:{{ .Values.namenode.ports.serviceRpc }} && exit 0 || sleep 1; done; exit 1'
         ]
+      - name: volume-permission
+        image: public.ecr.aws/y4g4v0z7/busybox
+        securityContext:
+          runAsUser: 0
+        # the /fsx/data{$vol} subdir in sync with s3 (data repo in Fsx) 
+        command: ["sh", "-c", "chown -R {{ .Values.datanode.securityContext.runAsUser }}:{{ .Values.datanode.securityContext.runAsUser }} /fsx"] 
+        volumeMounts:
+        # {{- range $vol := until (int .Values.datanode.dataVolumes.count) }} 
+          # - name: data{{$vol}} 
+            # mountPath: /fsx/data{{$vol}}
+        # {{- end }}       
+          - name: datavol
+            mountPath: /fsx
       containers:
       - name: datanode
         image: {{ .Values.datanode.repository }}:{{ .Values.datanode.tag }}
@@ -74,10 +88,12 @@ spec:
         - name: secrets
           mountPath: {{ .Values.secrets.path }}
           readOnly: true
-{{- range $k, $v := until (int .Values.datanode.dataVolumes.count) }}
-        - name: data{{$v}}
-          mountPath: /data0/dn{{$v}}
-{{- end }}
+       # {{- range $vol := until (int .Values.datanode.dataVolumes.count) }}   
+        # - name: data{{$vol}} 
+          # mountPath: /fsx/data{{$vol}} 
+       # {{- end }}     
+        - name: datavol
+          mountPath: /fsx 
         ports:
         - name: http
           containerPort: {{ .Values.datanode.ports.http }}

@@ -22,14 +22,12 @@ namenode:
   imagePullSecrets: []
   resources: {}
   nodeSelector: 
-    app: hdfs
-    eks.amazonaws.com/nodegroup: hdfs-mn
+    app: sparktest
+    eks.amazonaws.com/nodegroup: c59b
   tolerations: []
   affinity: {}
   securityContext:
-    runAsNonRoot: true
     runAsUser: 1000
-    runAsGroup: 1000
     fsGroup: 1000
   ports:
     http: 9870
@@ -40,32 +38,31 @@ namenode:
   dataVolumes:
     count: 1
     pvcTemplateSpec:
-      storageClassName: fsx
+      # namenode disk is small, use the default gp2 EBS volume
+      storageClassName: null
       accessModes:
         - ReadWriteOnce
       resources:
         requests:
-          storage: 200Gi
+          storage: 50Gi
   extraEnvVars: {}
   # Example usage:
   # HADOOP_HEAPSIZE_MIN: 128m
   # hadoop.heapsize.min: 128m
 datanode:
-  nodeCount: 3
+  nodeCount: 2
   repository: gchq/hdfs
   tag: 3.2.2 # managed version
   imagePullPolicy: IfNotPresent
   imagePullSecrets: []
   resources: {}
   nodeSelector: 
-    app: hdfs
-    eks.amazonaws.com/nodegroup: hdfs-mn
+    app: sparktest
+    eks.amazonaws.com/nodegroup: c59b
   tolerations: []
   affinity: {}
   securityContext:
-    runAsNonRoot: true
     runAsUser: 1000
-    runAsGroup: 1000
     fsGroup: 1000
   ports:
     http: 9864
@@ -73,14 +70,15 @@ datanode:
     data: 9866
     ipc: 9867
   dataVolumes:
-    count: 3
+    count: 2
+    # dynamically provision Fsx for lustre per datanode pod
     pvcTemplateSpec:
       storageClassName: fsx
       accessModes:
         - ReadWriteOnce
       resources:
         requests:
-          storage: 220Gi
+          storage: 550Gi
   extraEnvVars: {}
   # Example usage:
   # HADOOP_HEAPSIZE_MIN: 128m

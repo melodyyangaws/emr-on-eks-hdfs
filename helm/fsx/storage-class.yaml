@@ -1,0 +1,14 @@
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: fsx
+provisioner: fsx.csi.aws.com
+parameters:
+  subnetId: subnet-06b10a9a4f65c1df6
+  securityGroupIds: sg-0a67fe86bf4dcef87
+  deploymentType: PERSISTENT_2
+  perUnitStorageThroughput: "125"
+  dataCompressionType: LZ4
+  # s3ExportPath: s3://emr-on-eks-rss-021732063925-us-west-2/hdfssync
+  # s3ImportPath:  s3:/emr-on-eks-rss-021732063925-us-west-2/hdfssync

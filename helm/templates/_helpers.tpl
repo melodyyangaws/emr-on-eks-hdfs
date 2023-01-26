@@ -56,24 +56,23 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 
 {{- define "hdfs.namenode.volumes" -}}
 {{- $count := int . -}}
-{{- range $k, $v := until $count -}}
-{{- range $i := until $count -}}
-{{- if or (gt $v 0) (gt $i 0) -}},{{- end -}}
-/data0/nn{{- $v -}}/dfs/name{{- $i -}}
-{{- end -}}
+{{- range $vol := until $count -}}
+	{{- if (gt $vol 0) -}},{{- end -}}
+/fsx/nn{{- $vol -}}/dfs/name
 {{- end -}}
 {{- end -}}
 
+
 {{- define "hdfs.datanode.volumes" -}}
-{{- $count := int . -}}
-{{- range $k, $v := until $count -}}
-	{{- range $i := until $count -}}
-{{- if or (gt $v 0) (gt $i 0) -}},{{- end -}}
-/data0/dn{{- $v -}}/dfs/data{{- $i -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
+{{- $count := int .volcnt -}}
+{{- range $vol := until $count -}} 
+	{{- if (gt $vol 0) -}},{{- end -}}
+/fsx/data{{- $vol -}}/dfs/data
+	{{- end -}}
+	{{- end -}}
+
 
 {{- define "hdfs.namenodeServiceAccountName" -}}
 {{- default (printf "%s-namenode" (include "hdfs.fullname" .)) .Values.config.rackAwareness.serviceAccountName -}}
 {{- end -}}
+/

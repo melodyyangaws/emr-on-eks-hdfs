@@ -45,7 +45,8 @@ data:
       </property>
       <property>
         <name>dfs.datanode.data.dir</name>
-        <value>{{- template "hdfs.datanode.volumes" .Values.datanode.dataVolumes.count -}}</value>
+        {{- $d := dict "volcnt" (int .Values.datanode.dataVolumes.count) "nodecnt" (int .Values.datanode.nodeCount) }}
+        <value>{{- template "hdfs.datanode.volumes" $d -}}</value>
       </property>
 {{- range $k, $v := .Values.config.hdfsSite }}
       <property>
