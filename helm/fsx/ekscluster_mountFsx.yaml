@@ -26,14 +26,14 @@ iam:
       labels: {aws-usage: "application"}
     attachPolicyARNs:
     - arn:aws:iam::$ACCOUNTID:policy/$ROLE_NAME-policy
-  - metadata:
-      name: amp-iamproxy-ingest-service-account
-      namespace: prometheus
-      labels: {aws-usage: "monitoring"}
-    attachPolicyARNs: 
-    - "arn:aws:iam::aws:policy/AmazonPrometheusRemoteWriteAccess"
-    roleName: eks-rss-prometheus-ingest 
-    roleOnly: true    
+  # - metadata:
+  #     name: amp-iamproxy-ingest-service-account
+  #     namespace: prometheus
+  #     labels: {aws-usage: "monitoring"}
+  #   attachPolicyARNs: 
+  #   - "arn:aws:iam::aws:policy/AmazonPrometheusRemoteWriteAccess"
+  #   roleName: eks-rss-prometheus-ingest 
+  #   roleOnly: true    
 managedNodeGroups: 
   - name: hdfs-mn
     availabilityZones: ["us-west-2b"] 

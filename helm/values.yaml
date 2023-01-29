@@ -70,7 +70,7 @@ datanode:
     data: 9866
     ipc: 9867
   dataVolumes:
-    count: 2
+    count: 1
     # dynamically provision Fsx for lustre per datanode pod
     pvcTemplateSpec:
       storageClassName: fsx
@@ -78,7 +78,7 @@ datanode:
         - ReadWriteOnce
       resources:
         requests:
-          storage: 550Gi
+          storage: 1200Gi
   extraEnvVars: {}
   # Example usage:
   # HADOOP_HEAPSIZE_MIN: 128m

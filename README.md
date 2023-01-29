@@ -36,6 +36,19 @@ kubectl apply -k "github.com/kubernetes-sigs/aws-fsx-csi-driver/deploy/kubernete
 kubectl -f helm/fsx/storage-class.yaml
 kubectl get sc
 ```
+4. (OPTIONAL) if you provision FSx dynamically, add the IAM policy to the node instance IAM role. For example:`eks-rss-nodegroup-c59b-NodeInstanceRole`
+```yaml
+{
+    "Effect": "Allow",
+    "Action": [
+        "fsx:CreateFileSystem",
+        "fsx:DescribeFileSystems",
+        "fsx:TagResource"
+    ],
+    "Resource": "arn:aws:fsx:${AWS_REGION}:${ACCOUNTID}:file-system/*"
+}
+```
+
 
 Before the deployment, adjust the [values.yaml](./helm/values.yaml) based on your EKS settings. For example, we use the `nodeSelector` to assign a specific compute instance type and the AZ-b to the HDFS cluster:
 
