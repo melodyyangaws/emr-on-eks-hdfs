@@ -10,7 +10,7 @@ USER root
 
 RUN curl -o /etc/yum.repos.d/alsadi-dumb-init-epel-7.repo -sSL https://copr.fedorainfracloud.org/coprs/alsadi/dumb-init/repo/epel-7/alsadi-dumb-init-epel-7.repo
 RUN yum update -y && yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-RUN yum install -y xmlstarlet dumb-init 
+RUN yum install -y xmlstarlet dumb-init jq
 # RUN yum install -y sudo && echo "hadoop ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 RUN mkdir -p /usr/lib/hadoop-hdfs \
 	&&  mkdir -p /usr/lib/hadoop-yarn \

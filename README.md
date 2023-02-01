@@ -63,7 +63,7 @@ By default, the HDFS uses Hadoop version 3.2.1. See the [details](./helm/docs/aw
 ```bash
 cd helm
 helm install hdfs . -f ./values-eks-alb.yaml -n YOUR_NAMESPACE
-helm test hdfs -n YOUR_NAMESPACE
+helm test hdfs --debug -n YOUR_NAMESPACE
 ```
 
 ### Scale the datanode

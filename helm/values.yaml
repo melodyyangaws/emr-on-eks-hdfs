@@ -20,7 +20,7 @@ namenode:
   tag: latest
   # repository: gchq/hdfs # oss version
   # tag: 3.2.1 
-  imagePullPolicy: IfNotPresent
+  imagePullPolicy: Always
   imagePullSecrets: []
   resources: {}
   nodeSelector: 
@@ -58,7 +58,7 @@ datanode:
   tag: latest
   # repository: gchq/hdfs # oss version
   # tag: 3.2.1 
-  imagePullPolicy: IfNotPresent
+  imagePullPolicy: Always
   imagePullSecrets: []
   resources: {}
   nodeSelector: 
@@ -92,7 +92,7 @@ shell:
   enabled: true
   repository: melodydocker/hdfs
   tag: latest
-  imagePullPolicy: IfNotPresent
+  imagePullPolicy: Always
   imagePullSecrets: []
   resources: {}
   nodeSelector: 
