@@ -16,9 +16,9 @@ alpine:
   tag: 3.10.2
   imagePullPolicy: IfNotPresent
 namenode:
-  repository: gchq/hdfs
-  tag: 3.2.2 # managed version
-  imagePullPolicy: IfNotPresent
+  repository: melodydocker/hdfs
+  tag: latest # managed version
+  imagePullPolicy: Always
   imagePullSecrets: []
   resources: {}
   nodeSelector: 
@@ -27,7 +27,7 @@ namenode:
   tolerations: []
   affinity: {}
   securityContext:
-    runAsUser: 1000
+    runAsUser: 999
     fsGroup: 1000
   ports:
     http: 9870
@@ -51,9 +51,9 @@ namenode:
   # hadoop.heapsize.min: 128m
 datanode:
   nodeCount: 2
-  repository: gchq/hdfs
-  tag: 3.2.2 # managed version
-  imagePullPolicy: IfNotPresent
+  repository: melodydocker/hdfs
+  tag: latest # managed version
+  imagePullPolicy: Always
   imagePullSecrets: []
   resources: {}
   nodeSelector: 
@@ -62,7 +62,7 @@ datanode:
   tolerations: []
   affinity: {}
   securityContext:
-    runAsUser: 1000
+    runAsUser: 999
     fsGroup: 1000
   ports:
     http: 9864
@@ -70,7 +70,7 @@ datanode:
     data: 9866
     ipc: 9867
   dataVolumes:
-    count: 1
+    count: 2
     # dynamically provision Fsx for lustre per datanode pod
     pvcTemplateSpec:
       storageClassName: fsx
@@ -78,16 +78,16 @@ datanode:
         - ReadWriteOnce
       resources:
         requests:
-          storage: 1200Gi
+          storage: 550Gi
   extraEnvVars: {}
   # Example usage:
   # HADOOP_HEAPSIZE_MIN: 128m
   # hadoop.heapsize.min: 128m
 shell:
   enabled: true
-  repository: gchq/hdfs
-  tag: 3.2.2 # managed version
-  imagePullPolicy: IfNotPresent
+  repository: melodydocker/hdfs
+  tag: latest # managed version
+  imagePullPolicy: Always
   imagePullSecrets: []
   resources: {}
   nodeSelector: 

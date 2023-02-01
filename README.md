@@ -1,6 +1,6 @@
 # Deploying HDFS on AWS EKS
 
-Some [RSS experiments in EMR on EKS](https://github.com/melodyyangaws/emr-on-eks-remote-shuffle-service) requires HDFS as the secondary shuffle storage. This repository contains the helm chart to simplify the HDFS installation.
+Some [RSS experiments in EMR on EKS](https://github.com/melodyyangaws/emr-on-eks-remote-shuffle-service) requires HDFS as the secondary shuffle storage. This repository contains the helm chart to simplify the HDFS installation in k8s.
 
 Firstly, follow the [instructions here](https://github.com/melodyyangaws/emr-on-eks-remote-shuffle-service#infrastructure) to provision and configure an [AWS EKS cluster](https://aws.amazon.com/eks/) that the HDFS Helm Chart can be deployed on.
 
@@ -10,7 +10,7 @@ By default, this chart deploys:
 * configuration for a replication factor of 3
 * dyanmically provisioned FSx for Lustre volume per datanode pod, ie. the PV & PVC are not required to create manually.
 
-NOTE: to create a FSx file system on the fly, the datanode pod will be in pending status for approx. 5 minutes.
+NOTE: to create a new FSx file system on the fly, the datanode pod will be in pending status for approx. 5 minutes.
 
 ## Quick start
 Spin up the namenode and datanode containers locally for a quick test. They automatically attach your local disk as the storage.

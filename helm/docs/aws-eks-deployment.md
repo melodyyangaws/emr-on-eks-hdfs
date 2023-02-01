@@ -1,7 +1,7 @@
 # Deploying HDFS on AWS EKS
 
 ## build custom image
-The default hdfs docker image is from the public docker hub, which is built under the Hadoop version 3.2.2. If you need to build a custom one, run the command:
+The default hdfs docker image is from the public docker hub, which is built under the Hadoop version 3.2.1. If you need to build a custom one, run the command:
 
 ```
 # Login to ECR

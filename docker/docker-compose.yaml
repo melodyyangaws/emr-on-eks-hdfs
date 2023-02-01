@@ -16,11 +16,11 @@ version: "3.7"
 
 services:
   hdfs-namenode:
-    image: gchq/hdfs:3.2.2
+    image: melodydocker/hdfs:latest
     build:
       context: .
       args:
-        HADOOP_VERSION: 3.2.2
+        HADOOP_VERSION: 3.2.1
     command: namenode
     container_name: hdfs-namenode
     hostname: hdfs-namenode-svc
@@ -37,7 +37,7 @@ services:
   hdfs-datanode:
     depends_on:
     - hdfs-namenode
-    image: gchq/hdfs:3.2.2
+    image: melodydocker/hdfs:latest
     command: datanode
     container_name: hdfs-datanode-svc
     hostname: hdfs-datanode
