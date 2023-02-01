@@ -17,10 +17,12 @@ version: "3.7"
 services:
   hdfs-namenode:
     image: melodydocker/hdfs:latest
+    # image: gchq/hdfs:${HADOOP_VERSION}
     build:
       context: .
       args:
         HADOOP_VERSION: 3.2.1
+        # HADOOP_VERSION: ${HADOOP_VERSION}
     command: namenode
     container_name: hdfs-namenode
     hostname: hdfs-namenode-svc

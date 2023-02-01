@@ -17,8 +17,10 @@ alpine:
   imagePullPolicy: IfNotPresent
 namenode:
   repository: melodydocker/hdfs
-  tag: latest # managed version
-  imagePullPolicy: Always
+  tag: latest
+  # repository: gchq/hdfs # oss version
+  # tag: 3.2.1 
+  imagePullPolicy: IfNotPresent
   imagePullSecrets: []
   resources: {}
   nodeSelector: 
@@ -27,7 +29,8 @@ namenode:
   tolerations: []
   affinity: {}
   securityContext:
-    runAsUser: 999
+    # runAsUser: 1000 # hadoop user in oss
+    runAsUser: 999 # hadoop user in EMR
     fsGroup: 1000
   ports:
     http: 9870
@@ -52,8 +55,10 @@ namenode:
 datanode:
   nodeCount: 2
   repository: melodydocker/hdfs
-  tag: latest # managed version
-  imagePullPolicy: Always
+  tag: latest
+  # repository: gchq/hdfs # oss version
+  # tag: 3.2.1 
+  imagePullPolicy: IfNotPresent
   imagePullSecrets: []
   resources: {}
   nodeSelector: 
@@ -86,8 +91,8 @@ datanode:
 shell:
   enabled: true
   repository: melodydocker/hdfs
-  tag: latest # managed version
-  imagePullPolicy: Always
+  tag: latest
+  imagePullPolicy: IfNotPresent
   imagePullSecrets: []
   resources: {}
   nodeSelector: 

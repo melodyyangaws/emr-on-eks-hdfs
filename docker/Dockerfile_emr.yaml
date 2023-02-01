@@ -10,8 +10,8 @@ USER root
 
 RUN curl -o /etc/yum.repos.d/alsadi-dumb-init-epel-7.repo -sSL https://copr.fedorainfracloud.org/coprs/alsadi/dumb-init/repo/epel-7/alsadi-dumb-init-epel-7.repo
 RUN yum update -y && yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-RUN yum install -y xmlstarlet dumb-init sudo 
-RUN echo "hadoop ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+RUN yum install -y xmlstarlet dumb-init 
+# RUN yum install -y sudo && echo "hadoop ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 RUN mkdir -p /usr/lib/hadoop-hdfs \
 	&&  mkdir -p /usr/lib/hadoop-yarn \
 	&&  mkdir -p /usr/lib/hadoop-mapreduce \
@@ -20,13 +20,6 @@ RUN mkdir -p /usr/lib/hadoop-hdfs \
 COPY ./files/hadoop-hdfs /usr/lib/hadoop-hdfs
 COPY ./entrypoint.sh /
 
-# RUN cd /usr/lib/hadoop-hdfs && rm -rf *-client.jar *-httpfs.jar *-nfs.jar *-rbf.jar *-hdfs.jar \
-# 	&& ln -s hadoop-hdfs-native-client-3.2.1-amzn-8.jar hadoop-hdfs-native-client.jar \
-# 	&& ln -s hadoop-hdfs-client-3.2.1-amzn-8.jar hadoop-hdfs-client.jar \
-# 	&& ln -s hadoop-hdfs-3.2.1-amzn-8.jar hadoop-hdfs.jar \
-# 	&& ln -s hadoop-hdfs-nfs-3.2.1-amzn-8.jar hadoop-hdfs-nfs.jar \
-# 	&& ln -s hadoop-hdfs-rbf-3.2.1-amzn-8.jar hadoop-hdfs-rbf.jar \
-# 	&& ln -s hadoop-hdfs-httpfs-3.2.1-amzn-8.jar hadoop-hdfs-httpfs.jar \
 RUN chmod -R 755 /usr/lib/hadoop-hdfs
 ENTRYPOINT ["/entrypoint.sh", "hdfs"]
 

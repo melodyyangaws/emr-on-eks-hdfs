@@ -59,8 +59,9 @@ Before the deployment, adjust the [values.yaml](./helm/values.yaml) based on you
 ```
 
 ### Deploy to EKS
-
+By default, the HDFS uses Hadoop version 3.2.1. See the [details](./helm/docs/aws-eks-deployment.md) in terms of how to build a custom image for a differnt version,
 ```bash
+cd helm
 helm install hdfs . -f ./values-eks-alb.yaml
 helm test hdfs
 ```
