@@ -59,18 +59,19 @@ Before the deployment, adjust the [values.yaml](./helm/values.yaml) based on you
 ```
 
 ### Deploy to EKS
-By default, the HDFS uses Hadoop version 3.2.1. See the [details](./helm/docs/aws-eks-deployment.md) in terms of how to build a custom image for a differnt version,
+By default, the HDFS uses Hadoop version 3.2.1. See the [details](./helm/docs/aws-eks-deployment.md) in terms of how to build a custom image for a differnt version.
 ```bash
 cd helm
-helm install hdfs . -f ./values-eks-alb.yaml
-helm test hdfs
+helm install hdfs . -f ./values-eks-alb.yaml -n YOUR_NAMESPACE
+helm test hdfs -n YOUR_NAMESPACE
 ```
 
 ### Scale the datanode
 ```bash
+kubectl get pod -n YOUR_NAMESPACE
 #EXAMPLE
-kubectl scale statefulsets hdfs-datanode --replicas=3
+kubectl scale statefulsets hdfs-datanode -n YOUR_NAMESPACE --replicas=3
 
-kubectl scale statefulsets hdfs-datanode --replicas=<N number desired>
+kubectl scale statefulsets hdfs-datanode -n YOUR_NAMESPACE --replicas=<N number desired>
 ```
 

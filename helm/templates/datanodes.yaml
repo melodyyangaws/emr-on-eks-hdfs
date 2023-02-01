@@ -60,7 +60,7 @@ spec:
         securityContext:
           runAsUser: 0
         # the /fsx/data{$vol} subdir in sync with s3 (data repo in Fsx) 
-        command: ["sh", "-c", "chown -R {{ .Values.datanode.securityContext.runAsUser }}:{{ .Values.datanode.securityContext.runAsUser }} /fsx"] 
+        command: ["sh", "-c", "chown -R {{ .Values.datanode.securityContext.runAsUser }}:{{ .Values.datanode.securityContext.fsGroup }} /fsx"] 
         volumeMounts:
         # {{- range $vol := until (int .Values.datanode.dataVolumes.count) }} 
           # - name: data{{$vol}} 

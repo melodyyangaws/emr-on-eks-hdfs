@@ -28,7 +28,7 @@ spec:
   - name: test
     image: {{ .Values.shell.repository }}:{{ .Values.shell.tag }}
     imagePullPolicy: {{ .Values.shell.imagePullPolicy }}
-    command: ["/bin/sh", "-c", "hadoop fs -put -f /opt/hadoop/LICENSE.txt / && hadoop fs -ls / && hadoop fs -rm /LICENSE.txt; rc=$?; echo $rc; [ $rc {{ if hasKey .Values.config.hdfsSite "hadoop.security.forward.authentication.url" }}!={{ else }}={{ end }} 0 ]"]
+    command: ["/bin/sh", "-c", "FILE=/usr/share/aws/aws-java-sdk/LICENSE.txt; if test -f $FILE; then path=$FILE;  else path=/opt/hadoop/LICENSE.txt; fi; hadoop fs -put -f $path / && hadoop fs -ls / && hadoop fs -rm /LICENSE.txt; rc=$?; echo $rc; [ $rc {{ if hasKey .Values.config.hdfsSite "hadoop.security.forward.authentication.url" }}!={{ else }}={{ end }} 0 ]"]
     env:
     - name: HADOOP_CONF_DIR
       value: {{ .Values.config.path }}

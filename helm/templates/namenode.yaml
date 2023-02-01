@@ -55,7 +55,7 @@ spec:
         image: public.ecr.aws/y4g4v0z7/busybox
         securityContext:
           runAsUser: 0
-        command: ["sh", "-c", "chown -R {{ .Values.namenode.securityContext.runAsUser }}:{{ .Values.namenode.securityContext.runAsUser }} /fsx"] 
+        command: ["sh", "-c", "chown -R {{ .Values.namenode.securityContext.runAsUser }}:{{ .Values.namenode.securityContext.fsGroup }} /fsx"] 
         volumeMounts:
       # {{- range $vol := until (int .Values.namenode.dataVolumes.count) }}
         # - name: nn{{$vol}}
