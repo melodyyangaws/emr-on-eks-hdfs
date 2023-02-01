@@ -11,11 +11,11 @@ ECR_URL=$ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
 aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_URL
 aws ecr create-repository --repository-name hdfs --image-scanning-configuration scanOnPush=true
 
-# EXAMPLE: build with the open source Hadoop version 3.3.4
+# EXAMPLE#1: build with the open source Hadoop version 3.3.4
 docker build -t $ECR_URL/hdfs:3.3.4 -f docker/Dockerfile_oss.yaml --build-arg HADOOP_VERSION=3.3.4 .
 docker push $ECR_URL/hdfs:3.3.4
 
-# EXAMPLE: build based on the EMR on EKS image under Hadoop version 3.3.3
+# EXAMPLE#2: build based on the EMR on EKS image under Hadoop version 3.3.3
 docker build -t $ECR_URL/hdfs:emr3.3.3 -f docker/Dockerfile_oss.yaml --build-arg BASE_IMAGE_NAME=895885662937.dkr.ecr.us-west-2.amazonaws.com/spark/emr-6.9.0 .
 docker push $ECR_URL/hdfs:emr3.3.3
 ```
@@ -29,7 +29,6 @@ Then configure the Helm Chart to use them:
   EXTRA_HELM_ARGS+="--set namenode.repository=${ECR_URL}/hdfs"
   EXTRA_HELM_ARGS+="--set datanode.repository=${ECR_URL}/hdfs"
   EXTRA_HELM_ARGS+="--set shell.repository=${ECR_URL}/hdfs"
-fi
 ```
 
 ## Deploy Helm chart
